@@ -1,0 +1,31 @@
+/*mobile console start*/
+/*bone style*/
+#mobile-console-wrapper {width: 100%; height: 400px; position: fixed; bottom: 0; left: 0; z-index: 100000; 0px 0px 8px 2px #000}
+#mobile-console-wrapper.close {display: none}
+#mobile-console-wrapper .mc-tabs {height: 45px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch; border-bottom: 1px solid #bbb; border-top: 1px solid #bbb}
+#mobile-console-wrapper .tabs-list {width: auto; overflow: hidden}
+#mobile-console-wrapper .tab-item {border-right: 1px solid #bbb; padding: 0px 28px; line-height: 45px; float: left; background: #ddd; color: #666; text-align: center}
+#mobile-console-wrapper .tab-item.current {background: #fff; color: #000}
+#mobile-console-wrapper .mc-panels {height: 307px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+#mobile-console-wrapper .panel-item {display: none}
+#mobile-console-wrapper .panel-item.current {display: block}
+#mobile-console-wrapper .mc-bottom {height: 45px; border-top: 1px solid #bbb; line-height: 45px; overflow: auto; -webkit-overflow-scrolling: touch;}
+#mobile-console-wrapper .bottom-list {width: auto; overflow: hidden}
+#mobile-console-wrapper .bottom-item {text-align: center; float: left; padding: 0 28px; border-right: 1px solid #bbb}
+
+/*panel style*/
+#mobile-console-wrapper .console-log {line-height: 1.4em; border-bottom: 1px solid #bbb}
+#mobile-console-wrapper .console-log:nth-child(even) {background: #eee}
+#mobile-console-wrapper .console-log.debug {color: #ff8100}
+#mobile-console-wrapper .console-log.error {color: red}
+#mobile-console-wrapper .resource-tabs {overflow: auto; -webkit-overflow-scrolling: touch; height: 45px;}
+#mobile-console-wrapper .resource-tab {float: left; width: 33%;  height: 45px; line-height: 45px; overflow: hidden; background: #ddd; color: #666; border-right: 1px solid #bbb; text-align: center}
+#mobile-console-wrapper .resource-tab.current {color: #000; background: #fff;}
+#mobile-console-wrapper .resource-panels {box-sizing: border-box; height: 262px; overflow: auto; -webkit-overflow-scrolling: touch; border-top: 1px solid #bbb}
+#mobile-console-wrapper .resource-panel {display: none}
+#mobile-console-wrapper .resource-panel.current {display: block}
+#mobile-console-wrapper .resource-panel .item {line-height: 1.6em; border-bottom: 1px solid #bbb; overflow: hidden}
+#mobile-console-wrapper .resource-panel .item:nth-child(even) {background: #eee}
+#mobile-console-wrapper .resource-panel .key {float: left; color: #ff8100; text-align: center; width: 30%; overflow: hidden; border-right: 1px solid #bbb;}
+#mobile-console-wrapper .resource-panel .value {float: left; width: 70%; overflow: hidden; box-sizing: border-box; border-left: 1px solid #bbb; text-indent: 5px; margin-left: -1px}
+/*mobile console end*/
