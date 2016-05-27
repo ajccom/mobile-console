@@ -118,6 +118,26 @@ getActivePanel | 返回当前的面板对象
 
 <br />
 
+### 实践建议
+
+#### 何时初始化？
+
+开发者可以自由指定 Mobile Console 的初始化时机，比如：
+
+```javascript
+if (location.hash.indexOf('debug=true') > -1) {
+  mobileConsole.init()
+}
+```
+
+#### 玩转自定义面板
+
+除了一些调试功能的面板，我们还可以随意发挥。比如自动填表单、更改路由 hash 跑完单页流程等。
+
+在 [Demo](http://ajccom.github.io/mobile-console/) 中有两个自定义面板，一个用来切换皮肤，一个用来展示网页中的 Dom 结构。
+
+<br />
+
 ## Thanks
 
 <br />
