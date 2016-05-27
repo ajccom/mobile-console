@@ -1,0 +1,136 @@
+<!doctype>
+<html>
+<head>
+<meta charset="utf-8">
+<title>mobile console</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+</head>
+<body>
+<div class="main">我是一个文本</div>
+<script src="../src/mobile-console.js"></script>
+<script>
+mobileConsole.addPanel([{
+  id: 'style',
+  title: '切换皮肤',
+  initFn: function (tab, panel) {
+    panel.innerHTML = '<label class="skin-label"><input name="skin" type="radio" value="skin1" /> 皮肤 1 </label><label class="skin-label"><input name="skin" type="radio" value="skin2" /> 皮肤 2 </label>'
+    Array.prototype.map.call(panel.querySelectorAll('.skin-label input'), function (o) {
+      o.addEventListener('change', function () {
+        document.body.className = document.body.className.replace(/(\s*|^)[skin1|skin2](\s*|$)/g, ' ')
+        document.body.className += ' ' + this.value
+      })
+    })
+  },
+  extend: {
+    clear: function () {//替换默认的 Mobile Console 的清除行为，改为清除皮肤样式
+      document.body.className = document.body.className.replace(/(\s*|^)[skin1|skin2](\s*|$)/g, ' ')
+    }
+  }
+}, {
+  id: 'dom',
+  title: '显示 HTML 结构',
+  initFn: function (tab, panel) {
+    panel.innerHTML = '<div class="html-content"></div><div class="refresh">刷新</div>'
+    
+    function refresh () {
+      function facheDom (dom, html) {
+        var childrenHtml = '', arr = []
+        if (dom.children.length > 0) {
+          Array.prototype.map.call(dom.children, function (dom) {
+            arr.push(facheDom(dom, childrenHtml))
+          })
+        }
+        childrenHtml = arr.join('')
+        html += '<li class="dom-item"><span class="tag-name">' + dom.tagName.toLowerCase() + '</span><span class="id">' + dom.id + '</span><span class="class-name">' + dom.className.split(/\s{1,}/g).join('.') + '</span>' + (childrenHtml ? '<ul class="children-item">' + childrenHtml + '</ul>' : '') + '</li>'
+        return html
+      }
+      var doms = facheDom(document.documentElement, [])
+      panel.querySelector('.html-content').innerHTML = '<ul class="dom-list">' + doms + '</ul>'
+    }
+    
+    panel.querySelector('.html-content').addEventListener('click', function (e) {
+      var dom = e.target.parentElement,
+        cn = dom.className
+      if (cn.indexOf('dom-item') > -1) {
+        if (cn.indexOf('show') > -1) {
+          dom.className = cn.replace(/(\s*|^)show(\s*|$)/g, ' ')
+        } else {
+          dom.className += ' show'
+        }
+      }
+    })
+    
+    panel.querySelector('.refresh').addEventListener('click', refresh)
+    
+    refresh()
+  }
+}])
+
+mobileConsole.init()
+
+//console test
+console.log(0)
+try {
+  var a = new XMLHttpRequest()
+  a.open('https://baidu.com')
+} catch (e) {
+  console.error(e)
+}
+console.debug('debug test')
+</script>
+<style>
+* {margin: 0; padding: 0}
+ul, ol, li {list-style: none}
+
+/*app style*/
+.skin-label {padding: 10px; display: block}
+.skin1 .main {color: red}
+.skin2 .main {color: blue}
+.html-content {height: 307px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+.dom-list .dom-item {position: relative; padding: 10px;}
+.dom-list .dom-item::before {content: ''; width: 0px; height: 0px; position: absolute;  left: 2px; top: 15px; line-height: 0px; font-size: 0px; border-left: 5px solid #000; border-top: 5px dashed transparent; border-bottom: 5px dashed transparent; border-right: 5px dashed transparent; padding-right: 5px; transform-origin: 2px 5px}
+.dom-list .dom-item .tag-name {color: #666; padding-right: 10px; white-space: nowrap}
+.dom-list .dom-item .id {color: red; padding-right: 10px; white-space: nowrap}
+.dom-list .dom-item .id:not(:empty)::before {content: '#'}
+.dom-list .dom-item .class-name {color: red; padding-right: 10px; white-space: nowrap}
+.dom-list .dom-item .class-name:not(:empty)::before {content: '.'}
+.dom-list .dom-item .children-item {display: none}
+.dom-list .dom-item.show::before {transform: rotate(90deg)}
+.dom-list .dom-item.show > .children-item {padding-left: 10px; display: block}
+.panel-dom {position: relative}
+.panel-dom .refresh {position: absolute; right: 10px; top: 10px; padding: 4px 10px; border: 1px solid #ffccaa; background: #ffaabb; font-size: 14px; color: #fff; border-radius: 4px}
+
+/*mobile console start*/
+/*bone style*/
+#mobile-console-wrapper {width: 100%; height: 400px; position: fixed; bottom: 0; left: 0; z-index: 100000; 0px 0px 8px 2px #000}
+#mobile-console-wrapper.close {display: none}
+#mobile-console-wrapper .mc-tabs {height: 45px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch; border-bottom: 1px solid #bbb; border-top: 1px solid #bbb}
+#mobile-console-wrapper .tabs-list {width: auto; overflow: hidden}
+#mobile-console-wrapper .tab-item {border-right: 1px solid #bbb; padding: 0px 28px; line-height: 45px; float: left; background: #ddd; color: #666; text-align: center}
+#mobile-console-wrapper .tab-item.current {background: #fff; color: #000}
+#mobile-console-wrapper .mc-panels {height: 307px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+#mobile-console-wrapper .panel-item {display: none}
+#mobile-console-wrapper .panel-item.current {display: block}
+#mobile-console-wrapper .mc-bottom {height: 45px; border-top: 1px solid #bbb; line-height: 45px; overflow: auto; -webkit-overflow-scrolling: touch;}
+#mobile-console-wrapper .bottom-list {width: auto; overflow: hidden}
+#mobile-console-wrapper .bottom-item {text-align: center; float: left; padding: 0 28px; border-right: 1px solid #bbb}
+
+/*panel style*/
+#mobile-console-wrapper .console-log {line-height: 1.4em; border-bottom: 1px solid #bbb}
+#mobile-console-wrapper .console-log:nth-child(even) {background: #eee}
+#mobile-console-wrapper .console-log.debug {color: #ff8100}
+#mobile-console-wrapper .console-log.error {color: red}
+#mobile-console-wrapper .resource-tabs {overflow: auto; -webkit-overflow-scrolling: touch; height: 45px;}
+#mobile-console-wrapper .resource-tab {float: left; width: 33%;  height: 45px; line-height: 45px; overflow: hidden; background: #ddd; color: #666; border-right: 1px solid #bbb; text-align: center}
+#mobile-console-wrapper .resource-tab.current {color: #000; background: #fff;}
+#mobile-console-wrapper .resource-panels {box-sizing: border-box; height: 262px; overflow: auto; -webkit-overflow-scrolling: touch; border-top: 1px solid #bbb}
+#mobile-console-wrapper .resource-panel {display: none}
+#mobile-console-wrapper .resource-panel.current {display: block}
+#mobile-console-wrapper .resource-panel .item {line-height: 1.6em; border-bottom: 1px solid #bbb; overflow: hidden}
+#mobile-console-wrapper .resource-panel .item:nth-child(even) {background: #eee}
+#mobile-console-wrapper .resource-panel .key {float: left; color: #ff8100; text-align: center; width: 30%; overflow: hidden; border-right: 1px solid #bbb;}
+#mobile-console-wrapper .resource-panel .value {float: left; width: 70%; overflow: hidden; box-sizing: border-box; border-left: 1px solid #bbb; text-indent: 5px; margin-left: -1px}
+/*mobile console end*/
+</style>
+</body>
+</html>
