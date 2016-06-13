@@ -3,11 +3,11 @@
   /**
    * _map 遍历对象，辅助函数
    */
-  function _map (arr, cb) {
+  function _map ([...items], cb) {
     if (!cb) {return}
-    Array.prototype.map.call(arr, function (o) {
-      cb(o)
-    })
+    for (let v of items) {
+      cb(v)
+    }
   }
   
   /**
