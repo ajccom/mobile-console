@@ -27,6 +27,23 @@ mobileConsole.addPanel([{
     }
   }
 }, {
+  id: 'debug',
+  title: 'PC 联调',
+  initFn: function (tab, panel) {
+    panel.innerHTML = '<div class="form"><label><b>*</b>内网IP: <input type="input" id="ip" /></label><label><b>*</b>端口号: <input type="input" id="port" /></label><label>账号: <input type="input" id="accountid" /></label></div><div class="btn-box"><button>开启</button></div>'
+    ip = panel.querySelector('#ip')
+    port = panel.querySelector('#port')
+    id = panel.querySelector('#accountid')
+    panel.querySelector('.btn-box button').addEventListener('click', function (e) {
+      if (this.className !== 'on') {
+        var s = document.createElement('script')
+        s.src = '//' + (ip.value || '10.9.215.45') + ':' + (port.value || '8888') + '/target/target-script-min.js#' + (id.value || 'anonymous')
+        document.body.appendChild(s)
+      }
+      this.className = 'on'
+    })
+  }
+}, {
   id: 'dom',
   title: '显示 HTML 结构',
   initFn: function (tab, panel) {
@@ -91,6 +108,12 @@ ul, ol, li {list-style: none}
 .skin1 .main {color: red}
 .skin2 .main {color: blue}
 .html-content {height: 307px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+.panel-debug label {display: block; padding: 5px}
+.panel-debug label b {color: red; padding: 0 2px;}
+.panel-debug label input {width: 100px; padding: 2px;}
+.panel-debug .btn-box {text-align: center}
+.panel-debug .btn-box button {color: #fff; background: red; border: 1px solid #faa; font-size: 20px; border-radius: 2px; padding: 8px 20px}
+.panel-debug .btn-box button.on {background: green; border: 1px solid green;}
 .dom-list .dom-item {position: relative; padding: 10px;}
 .dom-list .dom-item::before {content: ''; width: 0px; height: 0px; position: absolute;  left: 2px; top: 15px; line-height: 0px; font-size: 0px; border-left: 5px solid #000; border-top: 5px dashed transparent; border-bottom: 5px dashed transparent; border-right: 5px dashed transparent; padding-right: 5px; transform-origin: 2px 5px}
 .dom-list .dom-item .tag-name {color: #666; padding-right: 10px; white-space: nowrap}
