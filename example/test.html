@@ -1,4 +1,4 @@
-<!doctype>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -25,44 +25,6 @@ mobileConsole.addPanel([{
     clear: function () {//替换默认的 Mobile Console 的清除行为，改为清除皮肤样式
       document.body.className = document.body.className.replace(/(\s*|^)[skin1|skin2](\s*|$)/g, ' ')
     }
-  }
-}, {
-  id: 'dom',
-  title: '显示 HTML 结构',
-  initFn: function (tab, panel) {
-    panel.innerHTML = '<div class="html-content"></div><div class="refresh">刷新</div>'
-    
-    function refresh () {
-      function facheDom (dom, html) {
-        var childrenHtml = '', arr = []
-        if (dom.children.length > 0) {
-          Array.prototype.map.call(dom.children, function (dom) {
-            arr.push(facheDom(dom, childrenHtml))
-          })
-        }
-        childrenHtml = arr.join('')
-        html += '<li class="dom-item"><span class="tag-name">' + dom.tagName.toLowerCase() + '</span><span class="id">' + dom.id + '</span><span class="class-name">' + dom.className.split(/\s{1,}/g).join('.') + '</span>' + (childrenHtml ? '<ul class="children-item">' + childrenHtml + '</ul>' : '') + '</li>'
-        return html
-      }
-      var doms = facheDom(document.documentElement, [])
-      panel.querySelector('.html-content').innerHTML = '<ul class="dom-list">' + doms + '</ul>'
-    }
-    
-    panel.querySelector('.html-content').addEventListener('click', function (e) {
-      var dom = e.target.parentElement,
-        cn = dom.className
-      if (cn.indexOf('dom-item') > -1) {
-        if (cn.indexOf('show') > -1) {
-          dom.className = cn.replace(/(\s*|^)show(\s*|$)/g, ' ')
-        } else {
-          dom.className += ' show'
-        }
-      }
-    })
-    
-    panel.querySelector('.refresh').addEventListener('click', refresh)
-    
-    refresh()
   }
 }])
 
