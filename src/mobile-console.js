@@ -20,7 +20,7 @@
     /**
      * _init 生成HTML，绑定通用事件
      */    
-    function _init () {
+    function _init () {      
       var tabsHtml = '<ul class="tabs-list">',
         panelsHtml = '',
         i = 0,
@@ -219,6 +219,72 @@
     
     panels.push(_initConsolePanel())
     panels.push(_initResourcePanel())
+    panels.push({
+      id: 'dom',
+      title: '显示 HTML 结构',
+      initFn: function (tab, panel) {
+        panel.innerHTML = '<div class="html-content"></div><div class="refresh">刷新</div>'
+        
+        function refresh () {
+          function listDom (dom, html) {
+            var childrenHtml = '', arr = []
+            if (dom.children.length > 0) {
+              Array.prototype.map.call(dom.children, function (dom) {
+                arr.push(listDom(dom, childrenHtml))
+              })
+            }
+            childrenHtml = arr.join('')
+            html += '<li class="dom-item"><span class="tag-name">' + dom.tagName.toLowerCase() + '</span><span class="id">' + dom.id + '</span><span class="class-name">' + dom.className.split(/\s{1,}/g).join('.') + '</span>' + (childrenHtml ? '<ul class="children-item">' + childrenHtml + '</ul>' : '') + '</li>'
+            return html
+          }
+          var doms = listDom(document.documentElement, [])
+          panel.querySelector('.html-content').innerHTML = '<ul class="dom-list">' + doms + '</ul>'
+        }
+        
+        panel.querySelector('.html-content').addEventListener('click', function (e) {
+          var dom = e.target.parentElement,
+            cn = dom.className
+          if (cn.indexOf('dom-item') > -1) {
+            if (cn.indexOf('show') > -1) {
+              dom.className = cn.replace(/(\s*|^)show(\s*|$)/g, ' ')
+            } else {
+              dom.className += ' show'
+            }
+          }
+        })
+        
+        panel.querySelector('.refresh').addEventListener('click', refresh)
+        
+        refresh()
+      },
+      extend: {
+        clear: function () {}
+      }
+    })
+    panels.push({
+      id: 'script',
+      title: '执行脚本',
+      initFn: function (tab, panel) {
+        var currentStatement = ''
+        
+        panel.innerHTML = '<div class="html-content"><textarea class="eval-textarea"></textarea></div><div class="run">执行</div>'
+        var ipt = panel.querySelector('.eval-textarea')
+        function run () {
+          if (ipt.value !== '') {
+            try {
+              console.log(ipt.value)
+              console.log('> ' + eval(ipt.value))
+            } catch (e) {console.error(e)}
+            ipt.value = ''
+          }
+        }
+        
+        panel.querySelector('.run').addEventListener('click', run)
+      },
+      extend: {
+        clear: function (panel) {panel.querySelector('.eval-textarea').value = ''}
+      }
+    })
     
     return panels
   }
@@ -257,10 +323,10 @@
     }
     
     function _initError () {
-      window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
+      window.addEventListener('error', function (errorMsg, url, lineNumber, column, errorObj) {
         console.error('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
               + ' Column: ' + column + ' StackTrace: ' + errorObj);
-      }
+      })
     }
     
     return {
@@ -334,12 +400,12 @@
         Array.prototype.map.call(panel.querySelectorAll('.resource-tab'), function (o) {
           o.className = o.className.replace(/(\s*|^)current(\s*|$)/g, ' ')
         })
-        panel.querySelector('.tab-' + id).className += ' current'
+        panel.querySelector('.tab-' + id.toLowerCase()).className += ' current'
         
         Array.prototype.map.call(panel.querySelectorAll('.resource-panel'), function (o) {
           o.className = o.className.replace(/(\s*|^)current(\s*|$)/g, ' ')
         })
-        panel.querySelector('.' + id + '-panel').className += ' current'
+        panel.querySelector('.' + id.toLowerCase() + '-panel').className += ' current'
         
         currentResource = id
       }
