@@ -234,7 +234,74 @@
     
     panels.push(_initConsolePanel())
     panels.push(_initResourcePanel())
-    
+    panels.push({
+      id: 'dom',
+      title: '显示 HTML 结构',
+      initFn: (tab, panel) => {
+        panel.innerHTML = '<div class="html-content"></div><div class="refresh">刷新</div>'
+        
+        function refresh () {
+          function listDom (dom, html) {
+            let childrenHtml = '', arr = []
+            if (dom.children.length > 0) {
+              Array.from(dom.children).map((dom) => {
+                arr.push(listDom(dom, childrenHtml))
+              })
+            }
+            childrenHtml = arr.join('')
+            html += '<li class="dom-item"><span class="tag-name">' + dom.tagName.toLowerCase() + '</span><span class="id">' + dom.id + '</span><span class="class-name">' + dom.className.split(/\s{1,}/g).join('.') + '</span>' + (childrenHtml ? '<ul class="children-item">' + childrenHtml + '</ul>' : '') + '</li>'
+            return html
+          }
+          let doms = listDom(document.documentElement, [])
+          panel.querySelector('.html-content').innerHTML = '<ul class="dom-list">' + doms + '</ul>'
+        }
+        
+        panel.querySelector('.html-content').addEventListener('click', (e) => {
+          var dom = e.target.parentElement,
+            cn = dom.className
+          if (cn.indexOf('dom-item') > -1) {
+            if (cn.indexOf('show') > -1) {
+              dom.className = cn.replace(/(\s*|^)show(\s*|$)/g, ' ')
+            } else {
+              dom.className += ' show'
+            }
+          }
+        })
+        
+        panel.querySelector('.refresh').addEventListener('click', refresh)
+        
+        refresh()
+      },
+      extend: {
+        clear: () => {}
+      }
+    })
+    panels.push({
+      id: 'script',
+      title: '执行脚本',
+      initFn: function (tab, panel) {
+        let currentStatement = ''
+        
+        panel.innerHTML = '<div class="html-content"><textarea class="eval-textarea"></textarea></div><div class="run">执行</div>'
+        let ipt = panel.querySelector('.eval-textarea')
+        function run () {
+          if (ipt.value !== '') {
+            try {
+              console.log(ipt.value)
+              console.log('> ' + eval(ipt.value))
+            } catch (e) {console.error(e)}
+            ipt.value = ''
+          }
+        }
+        
+        panel.querySelector('.run').addEventListener('click', run)
+      },
+      extend: {
+        clear: (panel) => {panel.querySelector('.eval-textarea').value = ''}
+      }
+    })
+	  
+	  
     return panels
   }
   
@@ -272,10 +339,10 @@
     }
     
     function _initError () {
-      window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
+      window.addEventListener('error', (errorMsg, url, lineNumber, column, errorObj) => {
         console.error('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
               + ' Column: ' + column + ' StackTrace: ' + errorObj);
-      }
+      })
     }
     
     return {
@@ -348,12 +415,12 @@
         _map(panel.querySelectorAll('.resource-tab'), function (o) {
           _removeClass(o, 'current')
         })
-        _addClass(panel.querySelector('.tab-' + id), 'current')
+        _addClass(panel.querySelector('.tab-' + id.toLowerCase()), 'current')
         
         _map(panel.querySelectorAll('.resource-panel'), function (o) {
           _removeClass(o, 'current')
         })
-        _addClass(panel.querySelector('.' + id + '-panel'), 'current')
+        _addClass(panel.querySelector('.' + id.toLowerCase() + '-panel'), 'current')
         
         currentResource = id
       }
