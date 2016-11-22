@@ -76,18 +76,6 @@ ul, ol, li {list-style: none}
 .panel-debug .btn-box {text-align: center}
 .panel-debug .btn-box button {color: #fff; background: red; border: 1px solid #faa; font-size: 20px; border-radius: 2px; padding: 8px 20px}
 .panel-debug .btn-box button.on {background: green; border: 1px solid green;}
-.dom-list .dom-item {position: relative; padding: 10px;}
-.dom-list .dom-item::before {content: ''; width: 0px; height: 0px; position: absolute;  left: 2px; top: 15px; line-height: 0px; font-size: 0px; border-left: 5px solid #000; border-top: 5px dashed transparent; border-bottom: 5px dashed transparent; border-right: 5px dashed transparent; padding-right: 5px; transform-origin: 2px 5px}
-.dom-list .dom-item .tag-name {color: #666; padding-right: 10px; white-space: nowrap}
-.dom-list .dom-item .id {color: red; padding-right: 10px; white-space: nowrap}
-.dom-list .dom-item .id:not(:empty)::before {content: '#'}
-.dom-list .dom-item .class-name {color: red; padding-right: 10px; white-space: nowrap}
-.dom-list .dom-item .class-name:not(:empty)::before {content: '.'}
-.dom-list .dom-item .children-item {display: none}
-.dom-list .dom-item.show::before {transform: rotate(90deg)}
-.dom-list .dom-item.show > .children-item {padding-left: 10px; display: block}
-.panel-dom {position: relative}
-.panel-dom .refresh {position: absolute; right: 10px; top: 10px; padding: 4px 10px; border: 1px solid #ffccaa; background: #ffaabb; font-size: 14px; color: #fff; border-radius: 4px}
 
 /*mobile console start*/
 /*bone style*/
