@@ -43,44 +43,6 @@ mobileConsole.addPanel([{
       this.className = 'on'
     })
   }
-}, {
-  id: 'dom',
-  title: '显示 HTML 结构',
-  initFn: function (tab, panel) {
-    panel.innerHTML = '<div class="html-content"></div><div class="refresh">刷新</div>'
-    
-    function refresh () {
-      function facheDom (dom, html) {
-        var childrenHtml = '', arr = []
-        if (dom.children.length > 0) {
-          Array.prototype.map.call(dom.children, function (dom) {
-            arr.push(facheDom(dom, childrenHtml))
-          })
-        }
-        childrenHtml = arr.join('')
-        html += '<li class="dom-item"><span class="tag-name">' + dom.tagName.toLowerCase() + '</span><span class="id">' + dom.id + '</span><span class="class-name">' + dom.className.split(/\s{1,}/g).join('.') + '</span>' + (childrenHtml ? '<ul class="children-item">' + childrenHtml + '</ul>' : '') + '</li>'
-        return html
-      }
-      var doms = facheDom(document.documentElement, [])
-      panel.querySelector('.html-content').innerHTML = '<ul class="dom-list">' + doms + '</ul>'
-    }
-    
-    panel.querySelector('.html-content').addEventListener('click', function (e) {
-      var dom = e.target.parentElement,
-        cn = dom.className
-      if (cn.indexOf('dom-item') > -1) {
-        if (cn.indexOf('show') > -1) {
-          dom.className = cn.replace(/(\s*|^)show(\s*|$)/g, ' ')
-        } else {
-          dom.className += ' show'
-        }
-      }
-    })
-    
-    panel.querySelector('.refresh').addEventListener('click', refresh)
-    
-    refresh()
-  }
 }])
 
 mobileConsole.init()
@@ -129,7 +91,7 @@ ul, ol, li {list-style: none}
 
 /*mobile console start*/
 /*bone style*/
-#mobile-console-wrapper {width: 100%; height: 400px; position: fixed; bottom: 0; left: 0; z-index: 100000; 0px 0px 8px 2px #000}
+#mobile-console-wrapper {width: 100%; height: 400px; position: fixed; bottom: 0; left: 0; z-index: 100000; background: #fff}
 #mobile-console-wrapper.close {display: none}
 #mobile-console-wrapper .mc-tabs {height: 45px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch; border-bottom: 1px solid #bbb; border-top: 1px solid #bbb}
 #mobile-console-wrapper .tabs-list {width: auto; overflow: hidden}
