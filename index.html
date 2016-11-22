@@ -119,7 +119,24 @@ ul, ol, li {list-style: none}
 #mobile-console-wrapper .resource-panel .item:nth-child(even) {background: #eee}
 #mobile-console-wrapper .resource-panel .key {float: left; color: #ff8100; text-align: center; width: 30%; overflow: hidden; border-right: 1px solid #bbb;}
 #mobile-console-wrapper .resource-panel .value {float: left; width: 70%; overflow: hidden; box-sizing: border-box; border-left: 1px solid #bbb; text-indent: 5px; margin-left: -1px}
-/*mobile console end*/
+#mobile-console-wrapper .html-content {height: 307px; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch;}
+#mobile-console-wrapper .panel-dom {position: relative}
+#mobile-console-wrapper .panel-dom .refresh {position: absolute; right: 10px; top: 10px; padding: 4px 10px; border: 1px solid #ffccaa; background: #ffaabb; font-size: 14px; color: #fff; border-radius: 4px}
+#mobile-console-wrapper .panel-dom {position: relative}
+#mobile-console-wrapper .panel-dom .refresh {position: absolute; right: 10px; top: 10px; padding: 4px 10px; border: 1px solid #ffccaa; background: #ffaabb; font-size: 14px; color: #fff; border-radius: 4px}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item {position: relative; padding: 10px;}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item::before {content: ''; width: 0px; height: 0px; position: absolute;  left: 2px; top: 15px; line-height: 0px; font-size: 0px; border-left: 5px solid #000; border-top: 5px dashed transparent; border-bottom: 5px dashed transparent; border-right: 5px dashed transparent; padding-right: 5px; transform-origin: 2px 5px}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item .tag-name {color: #666; padding-right: 10px; white-space: nowrap}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item .id {color: red; padding-right: 10px; white-space: nowrap}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item .id:not(:empty)::before {content: '#'}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item .class-name {color: red; padding-right: 10px; white-space: nowrap}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item .class-name:not(:empty)::before {content: '.'}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item .children-item {display: none}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item.show::before {transform: rotate(90deg)}
+#mobile-console-wrapper .panel-dom .dom-list .dom-item.show > .children-item {padding-left: 10px; display: block}
+#mobile-console-wrapper .panel-script {position: relative}
+#mobile-console-wrapper .panel-script .run {opacity: 0.6; position: absolute; right: 10px; top: 10px; padding: 4px 10px; border: 1px solid #00ff39; background: #00ff39; font-size: 14px; color: #fff; border-radius: 4px}
+#mobile-console-wrapper .panel-script textarea {font-size: 18px; line-height: 38px; width: 100%; border: 0 none; height: 100%; resize: none}
 </style>
 </body>
 </html>
